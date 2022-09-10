@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shellhacks2022/Data/Repositories/EventRepository/event_repository.dart';
 
 import '../../Data/Models/user.dart';
 
@@ -49,7 +50,7 @@ class CreatePage extends StatelessWidget {
               ),
               ElevatedButton(
                 onPressed: () {
-                  print(selectedParticipants);
+                 // EventRepository.createEvent(t, eventTime, zipCode)
                 },
                 child: Text('Create Event'),
               )
