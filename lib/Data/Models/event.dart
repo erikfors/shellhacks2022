@@ -19,8 +19,26 @@ class Event extends Equatable {
     this.owner,
   });
 
-  static Map<String,dynamic> eventToMap(String id, String title, DateTime eventTime, int zipCode, User? currentUser){
-    return {"id" : id, "title": title, "participants": [currentUser], "eventTime" : eventTime, "zip": zipCode, "owner": currentUser};
+  static Map<String, dynamic> eventToMap(String id, String title,
+      DateTime eventTime, int zipCode, User? currentUser) {
+    return {
+      "id": id,
+      "title": title,
+      "participants": [currentUser],
+      "eventTime": eventTime,
+      "zip": zipCode,
+      "owner": currentUser
+    };
+  }
+
+  static Event mapToEvent(Map<String, dynamic> map) {
+    return Event(
+        id: map["id"],
+        eventTime: map["eventTime"],
+        owner: map["owner"],
+        participants: map["participants"],
+        title: map["title"],
+        zipCode: map["zip"]);
   }
 
   @override

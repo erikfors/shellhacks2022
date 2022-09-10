@@ -13,10 +13,10 @@ class NavigationScreen extends StatefulWidget {
 }
 
 class _NavigationScreenState extends State<NavigationScreen> {
-  static List<Widget> _pages = <Widget>[
-    HomePage(),
-    CreatePage(),
-    EventPage(),
+  static List _pages = [
+    () => HomePage(),
+    () => CreatePage(),
+    () => EventPage(),
   ];
   int index = 0;
 
@@ -24,7 +24,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: _pages.elementAt(index),
+        child: _pages.elementAt(index)(),
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: index,
