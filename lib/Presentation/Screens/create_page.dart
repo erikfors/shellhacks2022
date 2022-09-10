@@ -1,3 +1,4 @@
+import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 
 import '../../Data/Models/user.dart';
@@ -5,6 +6,15 @@ import '../../Data/Models/user.dart';
 class CreatePage extends StatelessWidget {
   CreatePage({super.key});
   final List<User> selectedParticipants = [];
+
+  final nameControler = TextEditingController();
+  final descriptionControler = TextEditingController();
+  final locationControler = TextEditingController();
+
+  DateTime selectedDate = DateTime.now();
+
+  final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -14,28 +24,42 @@ class CreatePage extends StatelessWidget {
       // form with text fields for event name, description, participants, zipcode and date
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 25.0),
-        child: FormField(builder: (context) {
-          return Column(
+        child: Form(
+          key: _formKey,
+          child: Column(
             children: [
               TextFormField(
+                controller: nameControler,
                 decoration: const InputDecoration(
                   hintText: 'Event Name',
                 ),
               ),
               TextFormField(
+                controller: descriptionControler,
                 decoration: const InputDecoration(
                   hintText: 'Event Description',
                 ),
               ),
               TextFormField(
+                controller: locationControler,
                 decoration: const InputDecoration(
                   hintText: 'Zip code',
                 ),
               ),
-              TextFormField(
-                decoration: const InputDecoration(
-                  hintText: 'Event Date',
-                ),
+              DateTimePicker(
+                type: DateTimePickerType.dateTimeSeparate,
+                dateMask: 'd MMM, yyyy',
+                initialValue: DateTime.now().toString(),
+                firstDate: DateTime(2000),
+                lastDate: DateTime(2100),
+                icon: Icon(Icons.event),
+                dateLabelText: 'Date',
+                timeLabelText: "Hour",
+                onChanged: (val) => print(val),
+                onSaved: (val) {
+                  selectedDate = DateTime.parse(val!);
+                  print(selectedDate);
+                },
               ),
               // list where you can select multiple participants
               Expanded(
@@ -49,13 +73,15 @@ class CreatePage extends StatelessWidget {
               ),
               ElevatedButton(
                 onPressed: () {
-                  print(selectedParticipants);
+                  _formKey.currentState!.save();
+                  print(
+                      'Name: ${nameControler.text}, Description: ${descriptionControler.text}, Location: ${locationControler.text}');
                 },
                 child: Text('Create Event'),
               )
             ],
-          );
-        }),
+          ),
+        ),
       ),
     );
   }
