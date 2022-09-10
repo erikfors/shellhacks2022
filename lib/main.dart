@@ -1,12 +1,16 @@
-import 'package:flutter/material.dart';
+import 'package:bloc/bloc.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/widgets.dart';
+import 'package:shellhacks2022/Data/Blocs/observer.dart';
+import 'package:shellhacks2022/Data/Repositories/authentication_repository.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+import 'app.dart';
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  Bloc.observer = SimpleBlocObserver();
 
+<<<<<<< HEAD
   // This widget is the root of your application.
 
   @override
@@ -29,10 +33,14 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+=======
+  await Firebase.initializeApp();
+>>>>>>> f02af6150eb67b89f9cd1c78e2518908993625df
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+  final authenticationRepository = AuthenticationRepository();
+  await authenticationRepository.user.first;
 
+<<<<<<< HEAD
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
   // how it looks.
@@ -114,3 +122,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
+=======
+  runApp(App(authenticationRepository: authenticationRepository));
+}
+>>>>>>> f02af6150eb67b89f9cd1c78e2518908993625df
