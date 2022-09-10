@@ -49,25 +49,47 @@ class LoginForm extends StatelessWidget {
   }
 }
 
+  
 class _EmailInput extends StatelessWidget {
+  
   @override
   Widget build(BuildContext context) {
+    
+
     return BlocBuilder<LoginCubit, LoginState>(
       buildWhen: (previous, current) => previous.email != current.email,
-      builder: (context, state) {
-        return TextField(
-          key: const Key('loginForm_emailInput_textField'),
-          onChanged: (email) => context.read<LoginCubit>().emailChanged(email),
-          keyboardType: TextInputType.emailAddress,
-          decoration: InputDecoration(
-            labelText: 'email',
-            helperText: '',
-            errorText: state.email.invalid ? 'invalid email' : null,
-          ),
-        );
+      builder: (context, state)
+       {
+        return 
+           Padding(
+             padding: const EdgeInsets.symmetric(horizontal: 25.0),
+             child: Container(
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+                border: Border.all(color: Colors.white),
+                borderRadius: BorderRadius.circular(30),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 25.0),
+                child: TextField(
+                  key: const Key('loginForm_emailInput_textField'),
+                  onChanged: (email) => context.read<LoginCubit>().emailChanged(email),
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: InputDecoration(
+                    labelText: 'email',
+                    helperText: '',
+                    errorText: state.email.invalid ? 'invalid email' : null,
+                    border: InputBorder.none,
+                  ),
+                ),
+              ),
+        ),
+           );
       },
     );
   }
+
+  
 }
 
 class _PasswordInput extends StatelessWidget {
@@ -76,21 +98,36 @@ class _PasswordInput extends StatelessWidget {
     return BlocBuilder<LoginCubit, LoginState>(
       buildWhen: (previous, current) => previous.password != current.password,
       builder: (context, state) {
-        return TextField(
-          key: const Key('loginForm_passwordInput_textField'),
-          onChanged: (password) =>
-              context.read<LoginCubit>().passwordChanged(password),
-          obscureText: true,
-          decoration: InputDecoration(
-            labelText: 'password',
-            helperText: '',
-            errorText: state.password.invalid ? 'invalid password' : null,
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 25.0),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.grey[200],
+              border: Border.all(color: Colors.white),
+              borderRadius: BorderRadius.circular(30),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.only(left: 25.0),
+              child: TextField(
+                key: const Key('loginForm_passwordInput_textField'),
+                onChanged: (password) =>
+                    context.read<LoginCubit>().passwordChanged(password),
+                obscureText: true,
+                decoration: InputDecoration(
+                  labelText: 'password',
+                  helperText: '',
+                  errorText: state.password.invalid ? 'invalid password' : null,
+                  border: InputBorder.none,
+                ),
+              ),
+            ),
           ),
         );
       },
     );
   }
 }
+
 
 class _LoginButton extends StatelessWidget {
   @override
@@ -100,19 +137,22 @@ class _LoginButton extends StatelessWidget {
       builder: (context, state) {
         return state.status.isSubmissionInProgress
             ? const CircularProgressIndicator()
-            : ElevatedButton(
-                key: const Key('loginForm_continue_raisedButton'),
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
+            : Padding(
+              padding: const EdgeInsets.all(20),
+              child: ElevatedButton(
+                  key: const Key('loginForm_continue_raisedButton'),
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                    backgroundColor: Color.fromARGB(255, 198, 45, 7),
                   ),
-                  backgroundColor: const Color(0xFFFFD600),
+                  onPressed: state.status.isValidated
+                      ? () => context.read<LoginCubit>().logInWithCredentials()
+                      : null,
+                  child: const Text('LOGIN'),
                 ),
-                onPressed: state.status.isValidated
-                    ? () => context.read<LoginCubit>().logInWithCredentials()
-                    : null,
-                child: const Text('LOGIN'),
-              );
+            );
       },
     );
   }
@@ -134,39 +174,4 @@ class _SignUpButton extends StatelessWidget {
   }
 }
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
 
-  @override 
-  State<LoginPage> createState() => _LoginPageState();
-}
-
-class _LoginPageState extends State<LoginPage>{
-  @override  
-
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.grey[300],
-      body: SafeArea(
-        child: Column(children: [
-        // Hello Again 
-        Text("Hello everyone"),
-
-
-        //email 
-
-
-        //password
-
-        //sign in button
-
-        //not a member? register now
-
-
-
-
-      ]),
-      ),
-    );
-  }
-}
