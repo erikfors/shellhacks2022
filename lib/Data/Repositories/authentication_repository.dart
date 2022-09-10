@@ -1,10 +1,12 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:firebase_auth_platform_interface/firebase_auth_platform_interface.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:meta/meta.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Models/user.dart';
 
@@ -148,6 +150,64 @@ class LogInWithGoogleFailure implements Exception {
 /// Thrown during the logout process if a failure occurs.
 class LogOutFailure implements Exception {}
 
+class CacheClient {
+  void write({required String key, required dynamic value}) async {
+    final prefs = await SharedPreferences.getInstance();
+    if (value is String) {
+      prefs.setString(key, value);
+    } else if (value is bool) {
+      prefs.setBool(key, value);
+    } else if (value is int) {
+      prefs.setInt(key, value);
+    } else if (value is double) {
+      prefs.setDouble(key, value);
+    } else if (value is List<String>) {
+      prefs.setStringList(key, value);
+    } else {
+      prefs.setString(key, json.encode(value));
+    }
+  }
+
+  Future<User> readUser() async {
+    final prefs = await SharedPreferences.getInstance();
+    final user = prefs.getString('user');
+    if (user == null) {
+      return User.empty;
+    }
+    return User.fromJson(json.decode(user));
+  }
+
+  String readString({required String key}) {
+    final prefs = SharedPreferences.getInstance();
+    return prefs.toString();
+  }
+
+  bool readBool({required String key}) {
+    final prefs = SharedPreferences.getInstance();
+    return prefs.toString() as bool;
+  }
+
+  int readInt({required String key}) {
+    final prefs = SharedPreferences.getInstance();
+    return prefs.toString() as int;
+  }
+
+  double readDouble({required String key}) {
+    final prefs = SharedPreferences.getInstance();
+    return prefs.toString() as double;
+  }
+
+  List<String> readStringList({required String key}) {
+    final prefs = SharedPreferences.getInstance();
+    return prefs.toString() as List<String>;
+  }
+
+  void remove({required String key}) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove(key);
+  }
+}
+
 //TODO: CacheClient
 /// {@template authentication_repository}
 /// Repository which manages user authentication.
@@ -160,15 +220,14 @@ class LogOutFailure implements Exception {}
 //   })  : _cache = cache ?? CacheClient(),
 //         _firebaseAuth = firebaseAuth ?? firebase_auth.FirebaseAuth.instance;
 
-//   final CacheClient _cache;
+final CacheClient _cache = CacheClient();
 //   final firebase_auth.FirebaseAuth _firebaseAuth;
 
-  class AuthenticationRepository {
+class AuthenticationRepository {
   /// {@macro authentication_repository}
   AuthenticationRepository({
     firebase_auth.FirebaseAuth? firebaseAuth,
-  })  :
-        _firebaseAuth = firebaseAuth ?? firebase_auth.FirebaseAuth.instance;
+  }) : _firebaseAuth = firebaseAuth ?? firebase_auth.FirebaseAuth.instance;
 
   final firebase_auth.FirebaseAuth _firebaseAuth;
 
@@ -181,7 +240,7 @@ class LogOutFailure implements Exception {}
   /// User cache key.
   /// Should only be used for testing purposes.
   @visibleForTesting
-  static const userCacheKey = '__user_cache_key__';
+  static const userCacheKey = 'user';
 
   /// Stream of [User] which will emit the current user when
   /// the authentication state changes.
@@ -190,7 +249,7 @@ class LogOutFailure implements Exception {}
   Stream<User> get user {
     return _firebaseAuth.authStateChanges().map((firebaseUser) {
       final user = firebaseUser == null ? User.empty : firebaseUser.toUser;
-      //_cache.write(key: userCacheKey, value: user);
+      _cache.write(key: userCacheKey, value: user);
       return user;
     });
   }
