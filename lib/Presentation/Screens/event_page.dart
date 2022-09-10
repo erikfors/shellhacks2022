@@ -5,8 +5,11 @@ class EventPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: const Text('Event Page'),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Events'),
+      ),
+      body: Center(child: Text('Events Page')),
     );
   }
 }
