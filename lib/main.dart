@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:twilio_flutter/twilio_flutter.dart';
 
 void main() {
   runApp(const MyApp());
@@ -52,11 +53,15 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _incrementCounter() {
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
+    TwilioFlutter twilioFlutter; 
+      twilioFlutter = TwilioFlutter(
+    accountSid : 'ACfef4c69574ba79f1cef7bf73f9ec9d60', // replace *** with Account SID
+    authToken : 'd65ff43afd4c8b21c564fa95bf134c84',  // replace xxx with Auth Token
+    twilioNumber : '+15737875184 '  // replace .... with Twilio Number
+    );
+    twilioFlutter.sendSMS(
+   toNumber : '+19542133337', 
+   messageBody : 'Your Social Security has been compromised. Reply 1 to Stop.'); 
       _counter++;
     });
   }
