@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shellhacks2022/Presentation/Screens/home_page.dart';
 import 'package:shellhacks2022/Presentation/Screens/login_page.dart';
+import 'package:shellhacks2022/Presentation/Screens/navigation_page.dart';
 import 'package:shellhacks2022/Presentation/Screens/sign_up_page.dart';
 
 import 'Data/Blocs/bloc_app/app_bloc.dart';
@@ -47,7 +48,7 @@ class AppView extends StatelessWidget {
             ];
           case AppStatus.authenticated:
             return [
-              const MaterialPage(child: HomePage()),
+              const MaterialPage(child: NavigationScreen()),
             ];
         }
       },
