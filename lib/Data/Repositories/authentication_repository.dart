@@ -163,6 +163,8 @@ class CacheClient {
       prefs.setDouble(key, value);
     } else if (value is List<String>) {
       prefs.setStringList(key, value);
+    } else if (value is User) {
+      prefs.setString(key, json.encode(value.toJson()));
     } else {
       prefs.setString(key, json.encode(value));
     }

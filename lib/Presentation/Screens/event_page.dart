@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 
-class EventPage extends StatelessWidget {
-  const EventPage({super.key});
+import '../../Data/Models/event.dart';
 
+class EventPage extends StatelessWidget {
+  EventPage({super.key});
+  final List<Event> events = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Events'),
-      ),
-      body: Center(child: Text('Events Page')),
-    );
+        appBar: AppBar(
+          title: const Text('Events'),
+        ),
+        // list of events with details
+        body: ListView());
   }
 }
