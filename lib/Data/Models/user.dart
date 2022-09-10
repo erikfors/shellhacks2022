@@ -6,14 +6,12 @@ import 'package:equatable/equatable.dart';
 /// [User.empty] represents an unauthenticated user.
 /// {@endtemplate}
 class User extends Equatable {
-
   final String? email;
   final String id;
   final String? name;
   final String? photo;
   final String? phoneNumber;
   final int? zipCode;
-
 
   /// {@macro user}
   const User({
@@ -36,4 +34,15 @@ class User extends Equatable {
 
   @override
   List<Object?> get props => [email, id, name, photo, phoneNumber, zipCode];
+
+  static User fromJson(decode) {
+    return User(
+      id: decode['id'],
+      email: decode['email'],
+      name: decode['name'],
+      photo: decode['photo'],
+      phoneNumber: decode['phoneNumber'],
+      zipCode: decode['zipCode'],
+    );
+  }
 }
