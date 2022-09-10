@@ -45,4 +45,15 @@ class User extends Equatable {
       zipCode: decode['zipCode'],
     );
   }
+
+  Map<String, String> toJson() {
+    return {
+      'id': id,
+      'email': email ?? '',
+      'name': name ?? '',
+      'photo': photo ?? '',
+      'phoneNumber': phoneNumber ?? '',
+      'zipCode': zipCode != null ? zipCode.toString() : '',
+    };
+  }
 }
