@@ -40,12 +40,9 @@ dependencies:
   font_awesome_flutter: ^10.1.0
   formz: ^0.4.0
   google_fonts: ^3.0.1
-<<<<<<< HEAD
   cloud_firestore: ^3.4.7
-=======
   shared_preferences: ^2.0.15
   twilio_flutter: ^0.0.9
->>>>>>> 3888ea30a294c3d16800bd902d66fbc418018b85
 
 dev_dependencies:
 

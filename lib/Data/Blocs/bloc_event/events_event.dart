@@ -1,4 +1,4 @@
-part of 'post_bloc.dart';
+part of 'events_bloc.dart';
 
 abstract class EventsEvent extends Equatable {
   @override
