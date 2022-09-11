@@ -6,7 +6,7 @@ import 'package:shellhacks2022/Data/Models/user.dart';
 import 'package:shellhacks2022/Data/Repositories/authentication_repository.dart';
 
 class EventRepository {
-  static void createEvent(String title, DateTime eventTime, int zipCode) async{
+  static Future<void> createEvent(String title, DateTime eventTime, int zipCode) async{
     
     var id = DateTime.now().toString();
     var cache = CacheClient();
@@ -14,12 +14,12 @@ class EventRepository {
     print(user.email);
     
     await FirebaseFirestore.instance
-        .collection("event")
+        .collection("Events")
         .add(Event.eventToMap(id, title, eventTime, zipCode, user));
   }
 
   static Future<List<Event>> fetchEvents() async {
-    var result = await FirebaseFirestore.instance.collection("event").get();
+    var result = await FirebaseFirestore.instance.collection("Events").get();
     List<Event> eventsList = [];
     for (var event in result.docs) {
       eventsList.add(
