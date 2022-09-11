@@ -97,28 +97,41 @@ class LogInWithEmailAndPasswordFailure implements Exception {
 class LogOutFailure implements Exception {}
 
 class CacheClient {
+  // singleton pattern
+  late final SharedPreferences _prefs;
+
+  static final CacheClient _instance = CacheClient._internal();
+
+  factory CacheClient() {
+    return _instance;
+  }
+
+  CacheClient._internal();
+
+  static Future<void> initialize() async {
+    _instance._prefs = await SharedPreferences.getInstance();
+  }
+
   void write({required String key, required dynamic value}) async {
-    final prefs = await SharedPreferences.getInstance();
     if (value is String) {
-      prefs.setString(key, value);
+      _prefs.setString(key, value);
     } else if (value is bool) {
-      prefs.setBool(key, value);
+      _prefs.setBool(key, value);
     } else if (value is int) {
-      prefs.setInt(key, value);
+      _prefs.setInt(key, value);
     } else if (value is double) {
-      prefs.setDouble(key, value);
+      _prefs.setDouble(key, value);
     } else if (value is List<String>) {
-      prefs.setStringList(key, value);
+      _prefs.setStringList(key, value);
     } else if (value is User) {
-      prefs.setString(key, json.encode(value.toJson()));
+      _prefs.setString(key, json.encode(value.toJson()));
     } else {
-      prefs.setString(key, json.encode(value));
+      _prefs.setString(key, json.encode(value));
     }
   }
 
-  Future<User> readUser() async {
-    final prefs = await SharedPreferences.getInstance();
-    final user = prefs.getString('user');
+  User readUser() {
+    final user = _prefs.getString('user');
     if (user == null) {
       return User.empty;
     }
@@ -126,37 +139,31 @@ class CacheClient {
   }
 
   String readString({required String key}) {
-    final prefs = SharedPreferences.getInstance();
-    return prefs.toString();
+    return _prefs.toString();
   }
 
   bool readBool({required String key}) {
-    final prefs = SharedPreferences.getInstance();
-    return prefs.toString() as bool;
+    return _prefs.toString() as bool;
   }
 
   int readInt({required String key}) {
-    final prefs = SharedPreferences.getInstance();
-    return prefs.toString() as int;
+    return _prefs.toString() as int;
   }
 
   double readDouble({required String key}) {
-    final prefs = SharedPreferences.getInstance();
-    return prefs.toString() as double;
+    return _prefs.toString() as double;
   }
 
   List<String> readStringList({required String key}) {
-    final prefs = SharedPreferences.getInstance();
-    return prefs.toString() as List<String>;
+    return _prefs.toString() as List<String>;
   }
 
   void remove({required String key}) async {
-    final prefs = await SharedPreferences.getInstance();
-    prefs.remove(key);
+    _prefs.remove(key);
   }
 }
 
-final CacheClient _cache = CacheClient();
+final CacheClient _cache = CacheClient._instance;
 //   final firebase_auth.FirebaseAuth _firebaseAuth;
 
 class AuthenticationRepository {
@@ -185,7 +192,7 @@ class AuthenticationRepository {
   Stream<User> get user {
     return _firebaseAuth.authStateChanges().map((firebaseUser) {
       final user = firebaseUser == null ? User.empty : firebaseUser.toUser;
-      _cache.write(key: userCacheKey, value: user);
+      //_cache.write(key: userCacheKey, value: user);
       return user;
     });
   }
@@ -196,7 +203,8 @@ class AuthenticationRepository {
   //   return _cache.read<User>(key: userCacheKey) ?? User.empty;
   // }
   User get currentUser {
-    return User.empty;
+    return _cache.readUser();
+    // return User.empty;
   }
 
   /// Creates a new user with the provided [email] and [password].
@@ -223,12 +231,10 @@ class AuthenticationRepository {
     required String password,
   }) async {
     try {
-      
       await _firebaseAuth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
-
     } on FirebaseAuthException catch (e) {
       throw LogInWithEmailAndPasswordFailure.fromCode(e.code);
     } catch (_) {
