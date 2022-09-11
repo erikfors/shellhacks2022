@@ -151,7 +151,7 @@ class _LoginButton extends StatelessWidget {
                   onPressed: state.status.isValidated
                       ? () => context.read<LoginCubit>().logInWithCredentials()
                       : null,
-                  child: const Text('Login'),
+                  child: const Text('Login', style: TextStyle(color: Colors.white),),
                 ),
               );
       },
@@ -170,7 +170,7 @@ class _SignUpButton extends StatelessWidget {
         onPressed: () => Navigator.of(context).push<void>(SignUpPage.route()),
         child: Text(
           'CREATE ACCOUNT',
-          style: TextStyle(color: theme.primaryColor),
+          style: TextStyle(color: theme.colorScheme.onBackground),
         ),
       ),
     );
