@@ -76,7 +76,8 @@ class CreatePage extends StatelessWidget {
               ElevatedButton(
                 onPressed: () {
                   _formKey.currentState!.save();
-                 EventRepository.createEvent(nameControler.text,selectedDate, 12354);
+                  EventRepository.createEvent(
+                      nameControler.text, selectedDate, 12354);
                 },
                 child: Text('Create Event'),
               )
@@ -111,24 +112,28 @@ class _SelectableListState extends State<SelectableList> {
   @override
   Widget build(BuildContext context) {
     return ListView(
-      children: widget.children.map((e) {
-        return SelectableItem(
-          selected: widget.selectedChildren.contains(e),
-          onTap: () {
-            setState(() {
-              if (widget.selectedChildren.contains(e)) {
-                widget.selectedChildren.remove(e);
-              } else {
-                widget.selectedChildren.add(e);
-              }
-            });
-          },
-          child: ListTile(
-            title: Text(e.name!),
-            subtitle: Text(e.email!),
-          ),
-        );
-      }).toList(),
+      children: widget.children.map(
+        (e) {
+          return SelectableItem(
+            selected: widget.selectedChildren.contains(e),
+            onTap: () {
+              setState(
+                () {
+                  if (widget.selectedChildren.contains(e)) {
+                    widget.selectedChildren.remove(e);
+                  } else {
+                    widget.selectedChildren.add(e);
+                  }
+                },
+              );
+            },
+            child: ListTile(
+              title: Text(e.name!),
+              subtitle: Text(e.email!),
+            ),
+          );
+        },
+      ).toList(),
     );
   }
 }
@@ -154,7 +159,9 @@ class _SelectableItemState extends State<SelectableItem> {
     return GestureDetector(
       onTap: widget.onTap,
       child: Container(
-        color: widget.selected ? Colors.blue : Colors.white,
+        color: widget.selected
+            ? Theme.of(context).highlightColor
+            : Colors.transparent,
         child: widget.child,
       ),
     );
