@@ -12,7 +12,6 @@ class EventsList extends StatefulWidget {
 }
 
 class _EventsListState extends State<EventsList> {
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<EventsBloc, EventState>(
@@ -25,6 +24,7 @@ class _EventsListState extends State<EventsList> {
               return const Center(child: Text('no events'));
             }
             return ListView.builder(
+              padding: const EdgeInsets.only(top: 15),
               itemBuilder: (BuildContext context, int index) {
                 return SingleEvent(
                   eventTime: state.events[index].eventTime,
@@ -42,5 +42,4 @@ class _EventsListState extends State<EventsList> {
       },
     );
   }
-
 }
