@@ -6,16 +6,15 @@ import 'package:shellhacks2022/Data/Models/user.dart';
 import 'package:shellhacks2022/Data/Repositories/authentication_repository.dart';
 
 class EventRepository {
-  static Future<void> createEvent(String title, DateTime eventTime, int zipCode) async{
-    
+  static Future<void> createEvent(String title, DateTime eventTime,
+      List<String> participants, int zipCode) async {
     var id = DateTime.now().toString();
     var cache = CacheClient();
-    var user = await cache.readUser();
+    var user = cache.readUser();
     print(user.name);
-    
-    await FirebaseFirestore.instance
-        .collection("Events")
-        .add(Event.eventToMap(id, title, eventTime, zipCode, user));
+
+    await FirebaseFirestore.instance.collection("Events").add(
+        Event.eventToMap(id, title, participants, eventTime, zipCode, user));
   }
 
   static Future<List<Event>> fetchEvents() async {
