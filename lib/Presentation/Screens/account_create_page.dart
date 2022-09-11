@@ -109,6 +109,13 @@ class CreateAccountPage extends StatelessWidget {
                   height: 15,
                 ),
               ElevatedButton(
+                 style: ElevatedButton.styleFrom(
+                    fixedSize: const Size(160, 40),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    //disabledBackgroundColor: Color.fromARGB(255, 215, 216, 219),
+                  ),
                 onPressed: () {
                   CacheClient client = CacheClient();
 
@@ -116,6 +123,7 @@ class CreateAccountPage extends StatelessWidget {
                     key: 'user',
                     value: User(
                       id: '1',
+                      
                       email: email,
                       name: nameController.text,
                       photo: '',

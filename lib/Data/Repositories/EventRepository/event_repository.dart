@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shellhacks2022/Data/Models/event.dart';
 import 'package:shellhacks2022/Data/Models/user.dart' as UserModel;
@@ -31,18 +30,18 @@ class EventRepository {
           eventTime: DateTime.parse(event.get('id')),
           zipCode: 0,
           owner: UserModel.User.fromJson(jsonDecode(event.get('owner'))),
+          url: event.get('url'),
           participants: event
               .get('participants')
               .map((e) => UserModel.User.fromJson(jsonDecode(e)))
               .toList(),
         ),
+        
       );
     }
     print(
       result.docs.first
-          .get('participants')
-          .map((e) => UserModel.User.fromJson(jsonDecode(e)))
-          .toList() as List<dynamic>,
+          .get('url')
     );
     return eventsList;
   }

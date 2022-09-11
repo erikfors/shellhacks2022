@@ -138,8 +138,20 @@ class CreatePage extends StatelessWidget {
                   child: SelectableList(
                     selectedChildren: selectedParticipants,
                     children: const [
-                      User(id: '1', name: 'John', email: 'jhon@test.com'),
-                      User(id: '2', name: 'Jane', email: 'jane@test.com'),
+                      User(
+                          id: '1',
+                          name: 'John',
+                          email: 'jhon@test.com',
+                          phoneNumber: "3333333",
+                          photo: "vvvvvv",
+                          zipCode: 12345),
+                      User(
+                          id: '2',
+                          name: 'Jane',
+                          email: 'jane@test.com',
+                          phoneNumber: "444444",
+                          photo: "vvv2vvv",
+                          zipCode: 12345),
                     ],
                   ),
                 ),
@@ -147,6 +159,13 @@ class CreatePage extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(25.0),
                 child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    fixedSize: const Size(160, 40),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    //disabledBackgroundColor: Color.fromARGB(255, 215, 216, 219),
+                  ),
                   onPressed: () {
                     _formKey.currentState!.save();
                     EventRepository.createEvent(
@@ -155,10 +174,18 @@ class CreatePage extends StatelessWidget {
                       selectedParticipants
                           .map((e) => json.encode(e.toJson()))
                           .toList(),
-                      int.parse(locationControler.text) ,
+                      int.parse(locationControler.text),
                     );
+                    _formKey.currentState?.reset();
+                    selectedParticipants.clear();
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text("Added Succesfully!"),
+                    ));
                   },
-                  child: Text('Create Event'),
+                  child: Text(
+                    'Create Event',
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
               )
             ],

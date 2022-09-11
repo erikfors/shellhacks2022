@@ -28,7 +28,8 @@ class EventsBloc extends Bloc<EventsEvent, EventState> {
         ));
       }
      
-    } catch (_) {
+    } catch (e) {
+      print(e);
       emit(state.copyWith(status: EventStatus.failure));
     }
   }

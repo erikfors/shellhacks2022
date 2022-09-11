@@ -10,16 +10,17 @@ class Event extends Equatable {
   final DateTime? eventTime;
   final int? zipCode;
   final User? owner;
+  final String? url;
 
   /// {@macro user}
-  Event({
-    required this.id,
-    this.title,
-    this.participants,
-    this.eventTime,
-    this.zipCode,
-    this.owner,
-  });
+  Event(
+      {required this.id,
+      this.title,
+      this.participants,
+      this.eventTime,
+      this.zipCode,
+      this.owner,
+      this.url});
 
   static Map<String, dynamic> eventToMap(
       String id,
@@ -34,7 +35,9 @@ class Event extends Equatable {
       "participants": participants,
       "eventTime": eventTime,
       "zip": zipCode,
-      "owner": json.encode(currentUser!.toJson()),
+      "owner": json.encode(
+        currentUser!.toJson(),
+      ),
     };
   }
 
@@ -46,10 +49,11 @@ class Event extends Equatable {
       participants: map["participants"],
       title: map["title"],
       zipCode: int.parse(map["zip"]),
+      url: map["url"]
     );
   }
 
   @override
   List<Object?> get props =>
-      [id, title, participants, eventTime, zipCode, owner];
+      [id, title, participants, eventTime, zipCode, owner, url];
 }

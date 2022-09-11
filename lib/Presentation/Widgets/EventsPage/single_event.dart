@@ -1,8 +1,10 @@
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/material.dart';
+import 'package:shellhacks2022/Data/Models/event.dart';
 
 import '../../../Data/Models/user.dart';
+import '../../Screens/event_page.dart';
 
 class SingleEvent extends StatelessWidget {
   // list of events with details
@@ -12,110 +14,137 @@ class SingleEvent extends StatelessWidget {
   final DateTime? eventTime;
   final int? zipCode;
   final User? owner;
+  final String? url;
 
   SingleEvent(
       {this.eventTime,
       this.owner,
       this.participants,
       this.title,
-      this.zipCode});
+      this.zipCode,
+      this.url});
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 5,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(25.0),
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(25.0),
-        child: SizedBox(
-          height: 350,
-          child: Stack(
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8.0),
+      child: InkWell(   
+        splashColor: Colors.amber,
+        onDoubleTap: (() {
+          
+        EventPage.events.add(Event(
+          id: "id",
+          eventTime: eventTime,
+          owner: owner,
+          participants: participants,
+          title: title,
+          url: url,
+          zipCode: 12345,
+        ));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text("Added Succesfully!"),
+    ));
+        }),
+        child: Card(
+          elevation: 5,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(25.0),
+          ),
+          child: Column(
             children: [
-              Image.network(
-                'https://images.unsplash.com/photo-1503435980610-a51f3ddfee50?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1287&q=80',
-                height: 400,
-                width: double.infinity,
-                fit: BoxFit.cover,
-              ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        Colors.black.withOpacity(0),
-                        Colors.black.withOpacity(0.8),
-                      ],
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                    ),
-                  ),
-                ),
-              ),
-              Align(
-                alignment: Alignment.topLeft,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: CircleAvatar(
-                    radius: 30,
-                    backgroundColor: Colors.white,
-                    foregroundColor: Colors.black,
-                    child: Text(
-                      participants!.length.toString(),
-                    ),
-                  ),
-                ),
-              ),
-              Align(
-                alignment: Alignment.topRight,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: SizedBox(
-                    height: 70,
-                    width: 70,
-                    child: Card(
-                      child: Center(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              eventTime!.day.toString(),
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                              ),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(25.0),
+                child: SizedBox(
+                  height: 350,
+                  child: Stack(
+                    children: [
+                      Image.network(
+                        url ?? "",
+                        height: 400,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                      ),
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [
+                                Colors.black.withOpacity(0),
+                                Colors.black.withOpacity(0.8),
+                              ],
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
                             ),
-                            Text(
-                              getMonthName(eventTime!.month),
-                              style: TextStyle(
-                                fontSize: 12,
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                ),
-              ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: ListTile(
-                  title: Text(
-                    title!,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  trailing: Text(
-                    zipCode.toString(),
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: CircleAvatar(
+                            radius: 30,
+                            backgroundColor: Colors.white,
+                            foregroundColor: Colors.black,
+                            child: Text(
+                              participants!.length.toString(),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: SizedBox(
+                            height: 70,
+                            width: 70,
+                            child: Card(
+                              child: Center(
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      eventTime!.day.toString(),
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                    Text(
+                                      getMonthName(eventTime!.month),
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: ListTile(
+                          title: Text(
+                            title!,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          trailing: Text(
+                            zipCode.toString(),
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),

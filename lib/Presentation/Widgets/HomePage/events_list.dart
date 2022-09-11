@@ -32,6 +32,7 @@ class _EventsListState extends State<EventsList> {
                   participants: state.events[index].participants,
                   title: state.events[index].title,
                   zipCode: state.events[index].zipCode,
+                  url: state.events[index].url,
                 );
               },
               itemCount: state.events.length,
