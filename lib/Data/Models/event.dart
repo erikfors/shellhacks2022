@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:equatable/equatable.dart';
 import 'package:shellhacks2022/Data/Models/user.dart';
 
@@ -19,15 +21,20 @@ class Event extends Equatable {
     this.owner,
   });
 
-  static Map<String, dynamic> eventToMap(String id, String title,
-      DateTime eventTime, int zipCode, User? currentUser) {
+  static Map<String, dynamic> eventToMap(
+      String id,
+      String title,
+      List<String> participants,
+      DateTime eventTime,
+      int zipCode,
+      User? currentUser) {
     return {
       "id": id,
       "title": title,
-      "participants": [currentUser],
+      "participants": participants,
       "eventTime": eventTime,
       "zip": zipCode,
-      "owner": currentUser
+      "owner": json.encode(currentUser!.toJson()),
     };
   }
 
