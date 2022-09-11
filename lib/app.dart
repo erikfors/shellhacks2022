@@ -6,6 +6,7 @@ import 'package:shellhacks2022/Presentation/Screens/login_page.dart';
 import 'package:shellhacks2022/Presentation/Screens/navigation_page.dart';
 import 'package:shellhacks2022/Presentation/Screens/sign_up_page.dart';
 
+
 import 'Data/Blocs/bloc_app/app_bloc.dart';
 import 'Data/Repositories/authentication_repository.dart';
 
@@ -25,19 +26,20 @@ class App extends StatelessWidget {
         create: (_) => AppBloc(
           authenticationRepository: _authenticationRepository,
         ),
-        child: const AppView(),
+        child:  AppView(),
       ),
     );
   }
 }
 
 class AppView extends StatelessWidget {
-  const AppView({super.key});
-
+  AppView({super.key});
+  
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        //theme: theme,
+        theme: ThemeData(primaryColor: Color(0XFF6730EC)),
+
         home: FlowBuilder<AppStatus>(
       state: context.select((AppBloc bloc) => bloc.state.status),
       onGeneratePages: (state, pages) {
