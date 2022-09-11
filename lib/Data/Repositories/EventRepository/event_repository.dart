@@ -11,7 +11,7 @@ class EventRepository {
     var id = DateTime.now().toString();
     var cache = CacheClient();
     var user = await cache.readUser();
-    print(user.email);
+    print(user.name);
     
     await FirebaseFirestore.instance
         .collection("Events")
