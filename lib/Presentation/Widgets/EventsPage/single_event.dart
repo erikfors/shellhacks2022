@@ -8,7 +8,7 @@ class SingleEvent extends StatelessWidget {
   // list of events with details
 
   final String? title;
-  List<User>? participants;
+  List<dynamic>? participants;
   final DateTime? eventTime;
   final int? zipCode;
   final User? owner;
