@@ -1,10 +1,13 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:firebase_auth_platform_interface/firebase_auth_platform_interface.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:meta/meta.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Models/user.dart';
 
@@ -90,85 +93,84 @@ class LogInWithEmailAndPasswordFailure implements Exception {
   final String message;
 }
 
-/// {@template log_in_with_google_failure}
-/// Thrown during the sign in with google process if a failure occurs.
-/// https://pub.dev/documentation/firebase_auth/latest/firebase_auth/FirebaseAuth/signInWithCredential.html
-/// {@endtemplate}
-class LogInWithGoogleFailure implements Exception {
-  /// {@macro log_in_with_google_failure}
-  const LogInWithGoogleFailure([
-    this.message = 'An unknown exception occurred.',
-  ]);
-
-  /// Create an authentication message
-  /// from a firebase authentication exception code.
-  factory LogInWithGoogleFailure.fromCode(String code) {
-    switch (code) {
-      case 'account-exists-with-different-credential':
-        return const LogInWithGoogleFailure(
-          'Account exists with different credentials.',
-        );
-      case 'invalid-credential':
-        return const LogInWithGoogleFailure(
-          'The credential received is malformed or has expired.',
-        );
-      case 'operation-not-allowed':
-        return const LogInWithGoogleFailure(
-          'Operation is not allowed.  Please contact support.',
-        );
-      case 'user-disabled':
-        return const LogInWithGoogleFailure(
-          'This user has been disabled. Please contact support for help.',
-        );
-      case 'user-not-found':
-        return const LogInWithGoogleFailure(
-          'Email is not found, please create an account.',
-        );
-      case 'wrong-password':
-        return const LogInWithGoogleFailure(
-          'Incorrect password, please try again.',
-        );
-      case 'invalid-verification-code':
-        return const LogInWithGoogleFailure(
-          'The credential verification code received is invalid.',
-        );
-      case 'invalid-verification-id':
-        return const LogInWithGoogleFailure(
-          'The credential verification ID received is invalid.',
-        );
-      default:
-        return const LogInWithGoogleFailure();
-    }
-  }
-
-  /// The associated error message.
-  final String message;
-}
-
 /// Thrown during the logout process if a failure occurs.
 class LogOutFailure implements Exception {}
 
-//TODO: CacheClient
-/// {@template authentication_repository}
-/// Repository which manages user authentication.
-/// {@endtemplate}
-// class AuthenticationRepository {
-//   /// {@macro authentication_repository}
-//   AuthenticationRepository({
-//     CacheClient? cache,
-//     firebase_auth.FirebaseAuth? firebaseAuth,
-//   })  : _cache = cache ?? CacheClient(),
-//         _firebaseAuth = firebaseAuth ?? firebase_auth.FirebaseAuth.instance;
+class CacheClient {
+  // singleton pattern
+  late final SharedPreferences _prefs;
 
-//   final CacheClient _cache;
+  static final CacheClient _instance = CacheClient._internal();
+
+  factory CacheClient() {
+    return _instance;
+  }
+
+  CacheClient._internal();
+
+  static Future<void> initialize() async {
+    _instance._prefs = await SharedPreferences.getInstance();
+  }
+
+  void write({required String key, required dynamic value}) async {
+    if (value is String) {
+      _prefs.setString(key, value);
+    } else if (value is bool) {
+      _prefs.setBool(key, value);
+    } else if (value is int) {
+      _prefs.setInt(key, value);
+    } else if (value is double) {
+      _prefs.setDouble(key, value);
+    } else if (value is List<String>) {
+      _prefs.setStringList(key, value);
+    } else if (value is User) {
+      _prefs.setString(key, json.encode(value.toJson()));
+    } else {
+      _prefs.setString(key, json.encode(value));
+    }
+  }
+
+  User readUser() {
+    final user = _prefs.getString('user');
+    if (user == null) {
+      return User.empty;
+    }
+    return User.fromJson(json.decode(user));
+  }
+
+  String readString({required String key}) {
+    return _prefs.toString();
+  }
+
+  bool readBool({required String key}) {
+    return _prefs.toString() as bool;
+  }
+
+  int readInt({required String key}) {
+    return _prefs.toString() as int;
+  }
+
+  double readDouble({required String key}) {
+    return _prefs.toString() as double;
+  }
+
+  List<String> readStringList({required String key}) {
+    return _prefs.toString() as List<String>;
+  }
+
+  void remove({required String key}) async {
+    _prefs.remove(key);
+  }
+}
+
+final CacheClient _cache = CacheClient._instance;
 //   final firebase_auth.FirebaseAuth _firebaseAuth;
 
-  class AuthenticationRepository {
+class AuthenticationRepository {
   /// {@macro authentication_repository}
   AuthenticationRepository({
     firebase_auth.FirebaseAuth? firebaseAuth,
-  })  :
-        _firebaseAuth = firebaseAuth ?? firebase_auth.FirebaseAuth.instance;
+  }) : _firebaseAuth = firebaseAuth ?? firebase_auth.FirebaseAuth.instance;
 
   final firebase_auth.FirebaseAuth _firebaseAuth;
 
@@ -181,7 +183,7 @@ class LogOutFailure implements Exception {}
   /// User cache key.
   /// Should only be used for testing purposes.
   @visibleForTesting
-  static const userCacheKey = '__user_cache_key__';
+  static const userCacheKey = 'user';
 
   /// Stream of [User] which will emit the current user when
   /// the authentication state changes.
@@ -201,7 +203,8 @@ class LogOutFailure implements Exception {}
   //   return _cache.read<User>(key: userCacheKey) ?? User.empty;
   // }
   User get currentUser {
-    return User.empty;
+    return _cache.readUser();
+    // return User.empty;
   }
 
   /// Creates a new user with the provided [email] and [password].
