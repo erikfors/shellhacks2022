@@ -45,7 +45,10 @@ class HomePage extends StatelessWidget {
       // ),
       body: BlocProvider(
         create: (_) => EventsBloc()..add(EventsFetched()),
-        child: const EventsList(),
+        child: const Padding(
+          padding: EdgeInsets.all(25.0),
+          child: EventsList(),
+        ),
       ),
     );
   }
