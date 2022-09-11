@@ -45,13 +45,16 @@ class EventPage extends StatelessWidget {
         child: ListView.builder(
           itemCount: events.length,
           itemBuilder: (context, index) {
-            return SingleEvent(eventTime: events[index].eventTime,owner: events[index].owner,participants: events[index].participants,title: events[index].title,zipCode: events[index].zipCode,);
+            return SingleEvent(
+              eventTime: events[index].eventTime,
+              owner: events[index].owner,
+              participants: events[index].participants,
+              title: events[index].title,
+              zipCode: events[index].zipCode,
+            );
           },
         ),
       ),
     );
   }
 }
-
-
-
