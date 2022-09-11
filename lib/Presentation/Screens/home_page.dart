@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../Data/Blocs/bloc_app/app_bloc.dart';
+import '../../Data/Repositories/authentication_repository.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -12,6 +13,8 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final user = context.select((AppBloc bloc) => bloc.state.user);
+    final currentUser = CacheClient().readUser();
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Home'),
@@ -32,7 +35,8 @@ class HomePage extends StatelessWidget {
             const SizedBox(height: 4),
             Text(user.email ?? '', style: textTheme.headline6),
             const SizedBox(height: 4),
-            Text(user.name ?? '', style: textTheme.headline5),
+            Text(currentUser.phoneNumber ?? '', style: textTheme.headline5),
+            const SizedBox(height: 4),
           ],
         ),
       ),

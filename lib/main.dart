@@ -11,6 +11,8 @@ Future<void> main() async {
   await Firebase.initializeApp();
   Bloc.observer = SimpleBlocObserver();
   final authenticationRepository = AuthenticationRepository();
+  await CacheClient.initialize();
+
   await authenticationRepository.user.first;
 
   runApp(App(authenticationRepository: authenticationRepository));

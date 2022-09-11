@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:formz/formz.dart';
+import 'package:shellhacks2022/Presentation/Screens/account_create_page.dart';
 
 import '../../../Data/Blocs/cubit_sign_up/sign_up_cubit.dart';
 
@@ -13,6 +14,7 @@ class SignUpForm extends StatelessWidget {
     return BlocListener<SignUpCubit, SignUpState>(
       listener: (context, state) {
         if (state.status.isSubmissionSuccess) {
+          Navigator.of(context).pop();
           Navigator.of(context).pop();
         } else if (state.status.isSubmissionFailure) {
           ScaffoldMessenger.of(context)
@@ -128,7 +130,12 @@ class _SignUpButton extends StatelessWidget {
                   backgroundColor: Colors.orangeAccent,
                 ),
                 onPressed: state.status.isValidated
-                    ? () => context.read<SignUpCubit>().signUpFormSubmitted()
+                    ? () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (ascontext) => CreateAccountPage(
+                                oldContext: context, email: state.email.value),
+                          ),
+                        )
                     : null,
                 child: const Text('SIGN UP'),
               );
