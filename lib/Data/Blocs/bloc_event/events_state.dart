@@ -1,6 +1,6 @@
 part of 'events_bloc.dart';
 
-enum EventStatus { initial, success, failure, refreshing }
+enum EventStatus { initial, success, failure }
 
 class EventState extends Equatable {
   const EventState({
