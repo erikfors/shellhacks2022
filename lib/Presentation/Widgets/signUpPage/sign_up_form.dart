@@ -50,7 +50,7 @@ class _EmailInput extends StatelessWidget {
       buildWhen: (previous, current) => previous.email != current.email,
       builder: (context, state) {
         return Container(
-          height: 55.0,
+            height: 55.0,
             width: 400.0,
             decoration: BoxDecoration(
               //color: Colors.grey[200],

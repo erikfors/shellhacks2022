@@ -32,23 +32,78 @@ class CreatePage extends StatelessWidget {
           key: _formKey,
           child: Column(
             children: [
-              TextFormField(
-                controller: nameControler,
-                decoration: const InputDecoration(
-                  hintText: 'Event Name',
+              SizedBox(
+                height: 15,
+              ),
+              Container(
+                height: 55.0,
+                width: 400.0,
+                decoration: BoxDecoration(
+                  //color: Colors.grey[200],
+                  border: Border.all(color: Colors.white),
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 25.0, bottom: 5),
+                  child: TextFormField(
+                    controller: nameControler,
+                    decoration: const InputDecoration(
+                        contentPadding: EdgeInsets.only(
+                            left: 2, right: 5, top: 6, bottom: 1),
+                        hintText: 'Event Name',
+                        border: InputBorder.none),
+                  ),
                 ),
               ),
-              TextFormField(
-                controller: descriptionControler,
-                decoration: const InputDecoration(
-                  hintText: 'Event Description',
+              SizedBox(
+                height: 15,
+              ),
+
+              Container(
+                height: 55.0,
+                width: 400.0,
+                decoration: BoxDecoration(
+                  //color: Colors.grey[200],
+                  border: Border.all(color: Colors.white),
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 25.0, bottom: 5),
+                  child: TextFormField(
+                    controller: descriptionControler,
+                    decoration: const InputDecoration(
+                        contentPadding: EdgeInsets.only(
+                            left: 2, right: 5, top: 6, bottom: 1),
+                        hintText: 'Event Description',
+                        border: InputBorder.none),
+                  ),
                 ),
               ),
-              TextFormField(
-                controller: locationControler,
-                decoration: const InputDecoration(
-                  hintText: 'Zip code',
+              SizedBox(
+                height: 15,
+              ),
+              Container(
+                height: 55.0,
+                width: 400.0,
+                decoration: BoxDecoration(
+                  //color: Colors.grey[200],
+                  border: Border.all(color: Colors.white),
+                  borderRadius: BorderRadius.circular(30),
                 ),
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 25.0, bottom: 5),
+                  child: TextFormField(
+                    controller: locationControler,
+                    decoration: const InputDecoration(
+                        contentPadding: EdgeInsets.only(
+                            left: 2, right: 5, top: 6, bottom: 1),
+                        hintText: 'Zip code',
+                        border: InputBorder.none),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 15,
               ),
               DateTimePicker(
                 type: DateTimePickerType.dateTimeSeparate,
@@ -100,7 +155,7 @@ class CreatePage extends StatelessWidget {
                       selectedParticipants
                           .map((e) => json.encode(e.toJson()))
                           .toList(),
-                      12354,
+                      int.parse(locationControler.text) ,
                     );
                   },
                   child: Text('Create Event'),

@@ -265,6 +265,6 @@ extension on firebase_auth.User {
         name: displayName,
         photo: photoURL,
         phoneNumber: phoneNumber,
-        zipCode: 0);
+        );
   }
 }
