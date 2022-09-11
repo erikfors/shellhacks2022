@@ -65,29 +65,46 @@ class CreatePage extends StatelessWidget {
                   print(selectedDate);
                 },
               ),
-              // list where you can select multiple participants
-              Expanded(
-                child: SelectableList(
-                  selectedChildren: selectedParticipants,
-                  children: const [
-                    User(id: '1', name: 'John', email: 'jhon@test.com'),
-                    User(id: '2', name: 'Jane', email: 'jane@test.com'),
-                  ],
+              const Padding(
+                padding: EdgeInsets.only(top: 25.0),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text('Participants'),
                 ),
               ),
-              ElevatedButton(
-                onPressed: () {
-                  _formKey.currentState!.save();
-                  EventRepository.createEvent(
-                    nameControler.text,
-                    selectedDate,
-                    selectedParticipants
-                        .map((e) => json.encode(e.toJson()))
-                        .toList(),
-                    12354,
-                  );
-                },
-                child: Text('Create Event'),
+              const Divider(
+                color: Colors.white70,
+              ),
+              // list where you can select multiple participants
+
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 0.0),
+                  child: SelectableList(
+                    selectedChildren: selectedParticipants,
+                    children: const [
+                      User(id: '1', name: 'John', email: 'jhon@test.com'),
+                      User(id: '2', name: 'Jane', email: 'jane@test.com'),
+                    ],
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(25.0),
+                child: ElevatedButton(
+                  onPressed: () {
+                    _formKey.currentState!.save();
+                    EventRepository.createEvent(
+                      nameControler.text,
+                      selectedDate,
+                      selectedParticipants
+                          .map((e) => json.encode(e.toJson()))
+                          .toList(),
+                      12354,
+                    );
+                  },
+                  child: Text('Create Event'),
+                ),
               )
             ],
           ),
@@ -119,29 +136,33 @@ class _SelectableListState extends State<SelectableList> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: widget.children.map(
-        (e) {
-          return SelectableItem(
-            selected: widget.selectedChildren.contains(e),
-            onTap: () {
-              setState(
-                () {
-                  if (widget.selectedChildren.contains(e)) {
-                    widget.selectedChildren.remove(e);
-                  } else {
-                    widget.selectedChildren.add(e);
-                  }
-                },
-              );
-            },
-            child: ListTile(
-              title: Text(e.name!),
-              subtitle: Text(e.email!),
-            ),
-          );
-        },
-      ).toList(),
+    return ListView.separated(
+      itemCount: widget.children.length,
+      itemBuilder: (context, index) {
+        return SelectableItem(
+          selected: widget.selectedChildren.contains(widget.children[index]),
+          onTap: () {
+            setState(
+              () {
+                if (widget.selectedChildren.contains(widget.children[index])) {
+                  widget.selectedChildren.remove(widget.children[index]);
+                } else {
+                  widget.selectedChildren.add(widget.children[index]);
+                }
+              },
+            );
+          },
+          child: ListTile(
+            title: Text(widget.children[index].name!),
+            subtitle: Text(widget.children[index].email!),
+          ),
+        );
+      },
+      separatorBuilder: (BuildContext context, int index) {
+        return const Divider(
+          color: Colors.white70,
+        );
+      },
     );
   }
 }
