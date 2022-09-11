@@ -1,5 +1,6 @@
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:shellhacks2022/Data/Models/event.dart';
 import 'package:shellhacks2022/Data/Repositories/EventRepository/event_repository.dart';
 
 import '../../Data/Models/user.dart';
@@ -53,7 +54,7 @@ class CreatePage extends StatelessWidget {
                 initialValue: DateTime.now().toString(),
                 firstDate: DateTime(2000),
                 lastDate: DateTime(2100),
-                icon: Icon(Icons.event),
+                icon: const Icon(Icons.event),
                 dateLabelText: 'Date',
                 timeLabelText: "Hour",
                 onChanged: (val) => print(val),
@@ -75,8 +76,7 @@ class CreatePage extends StatelessWidget {
               ElevatedButton(
                 onPressed: () {
                   _formKey.currentState!.save();
-                  print(
-                      'Name: ${nameControler.text}, Description: ${descriptionControler.text}, Location: ${locationControler.text}');
+                 EventRepository.createEvent(nameControler.text,selectedDate, 12354);
                 },
                 child: Text('Create Event'),
               )

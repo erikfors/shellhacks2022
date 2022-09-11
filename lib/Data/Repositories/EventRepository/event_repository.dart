@@ -1,16 +1,21 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shellhacks2022/Data/Models/event.dart';
-import 'package:shellhacks2022/Data/Models/user.dart' as local;
+import 'package:shellhacks2022/Data/Models/user.dart';
+import 'package:shellhacks2022/Data/Repositories/authentication_repository.dart';
 
 class EventRepository {
-  static void createEvent(String title, DateTime eventTime, int zipCode) {
+  static void createEvent(String title, DateTime eventTime, int zipCode) async{
+    
     var id = DateTime.now().toString();
-    local.User? currentUser = FirebaseAuth.instance.currentUser as local.User?;
-
-    FirebaseFirestore.instance
+    var cache = CacheClient();
+    var user = await cache.readUser();
+    print(user.email);
+    
+    await FirebaseFirestore.instance
         .collection("event")
-        .add(Event.eventToMap(id, title, eventTime, zipCode, currentUser));
+        .add(Event.eventToMap(id, title, eventTime, zipCode, user));
   }
 
   static Future<List<Event>> fetchEvents() async {

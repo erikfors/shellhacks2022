@@ -32,6 +32,8 @@ class User extends Equatable {
   /// Convenience getter to determine whether the current user is not empty.
   bool get isNotEmpty => this != User.empty;
 
+
+
   @override
   List<Object?> get props => [email, id, name, photo, phoneNumber, zipCode];
 
@@ -42,7 +44,7 @@ class User extends Equatable {
       name: decode['name'],
       photo: decode['photo'],
       phoneNumber: decode['phoneNumber'],
-      zipCode: decode['zipCode'],
+      zipCode: int.parse(decode['zipCode']) ,
     );
   }
 
