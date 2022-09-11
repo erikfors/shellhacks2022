@@ -30,7 +30,7 @@ class LoginForm extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Image.network(
-                'https://i.imgur.com/58dNxnT.png',
+                'https://i.imgur.com/2luU6GJ.png',
                 height: 250,
               ),
               const SizedBox(height: 16),
@@ -170,7 +170,7 @@ class _SignUpButton extends StatelessWidget {
         onPressed: () => Navigator.of(context).push<void>(SignUpPage.route()),
         child: Text(
           'CREATE ACCOUNT',
-          style: TextStyle(color: theme.primaryColor),
+          //style: TextStyle(color: theme.primaryColor),
         ),
       ),
     );
